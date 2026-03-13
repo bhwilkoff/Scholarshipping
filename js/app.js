@@ -154,9 +154,11 @@ function applyFiltersAndSort() {
     
     const matchesCategory = state.filters.category === 'all' || s.categories.includes(state.filters.category);
     const matchesAmount = s.amount >= state.filters.minAmount;
+    
+    // Improved Location Filtering
     const matchesLocation = state.filters.location === 'all' || 
                            (state.filters.location === 'National' && s.location === 'National') ||
-                           (state.filters.location === 'State' && s.location !== 'National');
+                           (s.location === state.filters.location);
     
     return matchesSearch && matchesCategory && matchesAmount && matchesLocation;
   });
@@ -266,10 +268,10 @@ function renderDetail(id) {
         </ul>
 
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-          <a href="${s.applyLink}" target="_blank" class="btn-apply">Apply on Official Site ↗</a>
-          <button class="btn-details" onclick="openPromptModal(${s.id})">AI Co-Pilot</button>
-          <button class="btn-details" onclick="toggleSave(${s.id})">${isSaved ? 'Unsave' : 'Save to List'}</button>
-          <button class="btn-details" style="color:var(--color-danger); border-color:var(--color-danger)" onclick="alert('Thank you! We have logged this report and will verify the link shortly.')">Report Broken Link</button>
+          <a href="${s.applyLink}" target="_blank" class="btn-apply">Official Application ↗</a>
+          <button class="btn-details" onclick="openPromptModal(${s.id})">Support Partner Prompt</button>
+          <button class="btn-details" onclick="toggleSave(${s.id})">${isSaved ? 'Unsave' : 'Save Scholarship'}</button>
+          <button class="btn-details" style="color:var(--color-danger); border-color:var(--color-danger)" onclick="alert('Thank you! Our verification team will double-check this link.')">Report Issue</button>
         </div>
       </div>
 
@@ -335,10 +337,25 @@ function openPromptModal(id) {
   const prompt = PROMPT_TEMPLATES.collaborative(s);
 
   modalContent.innerHTML = `
-    <h2>AI Application Co-Pilot</h2>
-    <p class="prompt-instruction">Copy this prompt to start a guided brainstorming session with ChatGPT, Claude, or Gemini.</p>
-    <div class="prompt-text" id="prompt-text">${prompt}</div>
-    <button class="btn-copy" onclick="copyPrompt()">Copy to Clipboard</button>
+    <div class="prompt-view">
+      <div class="prompt-header-block">
+        <span class="badge">Support Partner Prompt</span>
+        <h2>Your Application Brainstorming Partner</h2>
+        <p>Copy this structured prompt to any modern AI assistant (Claude, Gemini, or GPT-4) to begin a guided drafting session that keeps you in the driver's seat.</p>
+      </div>
+      
+      <div class="prompt-box">
+        <div class="prompt-box-header">
+          <span>Official Prompt for ${s.name}</span>
+          <button class="btn-copy-small" onclick="copyPrompt()">Copy Code</button>
+        </div>
+        <div class="prompt-text-content" id="prompt-text">${prompt}</div>
+      </div>
+
+      <div class="prompt-footer-note">
+        <p><strong>Remember:</strong> This prompt is designed for <strong>co-creation</strong>. It will ask you questions rather than writing for you, ensuring your application remains authentically yours.</p>
+      </div>
+    </div>
   `;
 
   document.getElementById('modal-backdrop').classList.remove('hidden');
