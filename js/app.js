@@ -303,7 +303,13 @@ function renderDetail(id) {
             <svg style="width:16px; height:16px; stroke:white; vertical-align: middle; margin-right: 4px;"><use href="#icon-sparkles"></use></svg> AI Brainstorming Partner
           </button>
           <button class="btn-details" style="background: white; border: 1px solid var(--color-border); color: var(--color-text);" onclick="toggleSave(${s.id})">
+            <svg style="width:16px; height:16px; vertical-align: middle; margin-right: 4px; color:${isSaved ? 'var(--color-danger)' : 'var(--color-text-muted)'}">
+              <use href="${isSaved ? '#icon-heart-off' : '#icon-heart'}"></use>
+            </svg>
             ${isSaved ? 'Remove from Saved' : 'Save for Later'}
+          </button>
+          <button class="btn-details" style="background: transparent; border: 1px solid var(--color-danger); color: var(--color-danger);" onclick="alert('Thank you for your kindness! Our verification team will double-check this link immediately.')">
+            <svg style="width:16px; height:16px; vertical-align: middle; margin-right: 4px; stroke:currentColor;"><use href="#icon-alert-circle"></use></svg> Report an issue
           </button>
         </div>
       </div>
@@ -393,7 +399,7 @@ function closeModal() {
 function copyPrompt() {
   const text = document.getElementById('prompt-text').innerText;
   navigator.clipboard.writeText(text).then(() => {
-    alert('Prompt copied! You are ready to brainstorm.');
+    alert('✨ Prompt copied! You are ready to brainstorm your future.');
   });
 }
 
