@@ -13,39 +13,39 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>Scholarshipping</h1>
-        <p class="tagline">Find your future.</p>
+        <p class="tagline">Your debt-free future starts here.</p>
       </div>
 
       <nav class="sidebar-nav">
         <a href="#home" class="nav-item active" data-route="home">
-          <span class="icon">🏠</span> Home
+          <svg><use href="#icon-home"></use></svg> Finding a Match
         </a>
         <a href="#about" class="nav-item" data-route="about">
-          <span class="icon">ℹ️</span> About
+          <svg><use href="#icon-info"></use></svg> Our Mission
         </a>
       </nav>
 
       <div class="sidebar-filters">
-        <h3>Filters</h3>
+        <h3>Personalize your search</h3>
         
         <div class="filter-group">
-          <label for="filter-category">Category</label>
+          <label for="filter-category">What are you studying?</label>
           <select id="filter-category">
-            <option value="all">All Categories</option>
+            <option value="all">All Fields</option>
             <option value="Merit / Essay / Service">Merit / Service</option>
-            <option value="STEM">STEM</option>
-            <option value="Identity / Diversity">Identity / Diversity</option>
+            <option value="STEM">STEM & Tech</option>
+            <option value="Identity / Diversity">Diversity & Identity</option>
             <option value="Need-Based">Need-Based</option>
             <option value="Regional / State-Specific">Regional</option>
-            <option value="Arts">Arts</option>
-            <option value="Athletic">Athletic</option>
+            <option value="Arts">The Arts</option>
+            <option value="Athletic">Athletics</option>
           </select>
         </div>
 
         <div class="filter-group">
-          <label for="filter-amount">Min Amount</label>
+          <label for="filter-amount">Your funding goal</label>
           <select id="filter-amount">
-            <option value="0">Any</option>
+            <option value="0">Any Amount</option>
             <option value="1000">$1,000+</option>
             <option value="5000">$5,000+</option>
             <option value="10000">$10,000+</option>
@@ -54,9 +54,10 @@
         </div>
         
         <div class="filter-group">
-          <label for="filter-location">Location</label>
+          <label for="filter-location">Where are you based?</label>
           <select id="filter-location">
-            <option value="all">Any Location</option>
+            <!-- Same options as before, just updated label -->
+            <option value="all">Everywhere</option>
             <option value="National">National</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -112,11 +113,11 @@
         </div>
 
         <div class="filter-group">
-          <label for="sort-by">Sort By</label>
+          <label for="sort-by">View by</label>
           <select id="sort-by">
-            <option value="deadline">Deadline (Soonest)</option>
-            <option value="amount-high">Amount (Highest)</option>
-            <option value="likelihood">Likelihood (Best)</option>
+            <option value="deadline">Upcoming Deadlines</option>
+            <option value="amount-high">Highest Rewards</option>
+            <option value="likelihood">Best Fit / Odds</option>
           </select>
         </div>
       </div>
@@ -126,13 +127,22 @@
       
       <!-- VIEW: Home / Search Results -->
       <section id="view-home" class="view-section active">
+        
+        <div class="inspiration-banner">
+          <div class="inspiration-content">
+            <h2 id="motivation-title">You've got this!</h2>
+            <p id="motivation-text">Applying to just 3 scholarships a week can cover your entire tuition. We've verified these links so you can focus on your story.</p>
+          </div>
+        </div>
+
         <div class="search-header">
           <div class="search-bar">
             <label for="scholarship-search" class="visually-hidden">Search Scholarships</label>
-            <input type="text" id="scholarship-search" placeholder="Search verified scholarships...">
+            <svg><use href="#icon-search"></use></svg>
+            <input type="text" id="scholarship-search" placeholder="Search by major, career, or keywords...">
           </div>
           <div class="results-info">
-            <span id="result-count">0</span> verified results
+            <span id="result-count">0</span> verified matches found
           </div>
         </div>
 
@@ -143,7 +153,9 @@
 
       <!-- VIEW: Single Scholarship Detail Page -->
       <section id="view-detail" class="view-section hidden">
-        <button class="btn-back" onclick="window.history.back()">← Back to Search</button>
+        <button class="btn-back" onclick="window.history.back()">
+          <svg style="width:16px; height:16px;"><use href="#icon-arrow-left"></use></svg> Back to search
+        </button>
         <div id="detail-content" class="detail-container">
           <!-- Detail content injected here -->
         </div>
@@ -151,18 +163,35 @@
 
       <!-- VIEW: About -->
       <section id="view-about" class="view-section hidden">
-        <div class="about-container">
-          <h2>About Scholarshipping</h2>
-          <p>Scholarshipping is a verified database of scholarship opportunities designed to help students fund their education without debt. We prioritize accuracy, transparency, and student agency.</p>
-          <h3>Our Verification Promise</h3>
-          <p>Every scholarship marked as "Verified" has been manually checked by our team to ensure the link works and the details are accurate. We manually audit our database every 30 days.</p>
-          <h3>The Support Partner Prompt</h3>
-          <p>Instead of generating generic AI content, our "Support Partner Prompt" connects you with advanced AI assistants to act as a brainstorming partner. It's designed to ask you the right questions and help you build an application that is authentically yours.</p>
+        <div class="detail-container" style="max-width: 800px;">
+          <h2 class="detail-title">Our Mission: Education without Burden</h2>
+          <p>Scholarshipping was created with a simple belief: <strong>financial background should never be a barrier to academic potential.</strong></p>
+          
+          <div style="margin: 2rem 0; padding: 2rem; background: var(--color-bg); border-radius: var(--radius);">
+            <h3 style="margin-bottom: 1rem; color: var(--color-accent);">The Verified Promise</h3>
+            <p>Most scholarship sites are cluttered with expired links and "sweepstakes" that waste your time. We manually verify every entry in our core database to ensure it's a legitimate opportunity for real students.</p>
+          </div>
+
+          <h3 style="margin-bottom: 1rem; color: var(--color-accent);">Kindness in Technology</h3>
+          <p>Instead of using AI to replace your voice, we use it to amplify it. Our <strong>AI Brainstorming Partner</strong> is designed to ask you the right questions, helping you discover the unique parts of your story that scholarship committees love to see.</p>
         </div>
       </section>
 
     </main>
   </div>
+
+  <!-- SVG Sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+    <symbol id="icon-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></symbol>
+    <symbol id="icon-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="icon-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z"/></symbol>
+  </svg>
+
 
   <!-- Modal for Prompt Generator -->
   <div id="modal-backdrop" class="modal-backdrop hidden">

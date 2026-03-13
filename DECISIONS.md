@@ -48,3 +48,11 @@
 **Rationale**: The user explicitly requested "100% accuracy" and "verified links." Scraping 1000 links without a dedicated QA team/process guarantees broken links and frustration. A high-quality seed builds trust; a large, broken database destroys it.
 **Alternatives considered**: Scraping large public lists without checking.
 **Trade-offs**: Lower initial volume, but significantly higher user trust and data integrity.
+
+## Decision 005 — Transition to Kind & Supportive Design
+
+**Date**: [2026-03-13]
+**Decision**: Transition the UI from a dark-themed "sterile" database to a light-themed, encouraging, and supportive scholarship platform using Plus Jakarta Sans and Glassmorphism.
+**Rationale**: Students applying for scholarships are often stressed and overwhelmed. A light, airy, and supportive design reduces cognitive load and feels more like a helpful partner than a cold database.
+**Alternatives considered**: Maintaining dark mode as primary; adopting a more "academic/serious" traditional aesthetic.
+**Trade-offs**: Light mode requires more careful contrast management for accessibility; some "gamer/tech" aesthetic appeal may be lost in favor of broader accessibility and warmth.
