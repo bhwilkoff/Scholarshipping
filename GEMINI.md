@@ -1,14 +1,14 @@
-# [PROJECT NAME] — Project Context
+# College and Univeristy Scholarship Search — Project Context
 
 ## Project Identity
 
-**Name**: [Your App Name]
-**Purpose**: [One sentence — what does this app do, and why does it matter to the people who use it?]
-**Audience**: [Who uses this? What do they already know, and what are they trying to do?]
-**Human context**: [What changes in how people think, learn, or act because this app exists?]
+**Name**: Scholarshipping
+**Purpose**: This is the single resource any college-age student will need in order to find and apply to the most relevant scholarships for achieving their academic goals.
+**Audience**: This tool is for High School Juniors and Seniors and anyone else who is applying to Colleges and Universities and for whom money is a significant issue with attending the school(s) of their dreams. They likely will have specific schools in mind and a budget that is needed in order to afford them. They are trying to gather enough scholarship dollars together in order to graduate without debt.
+**Human context**: This app will change how people think about paying for college/university. It will allow them to think bigger and strive for more in their educational journey because they will no longer see financial burden as a significant barrier.
 
-**GitHub repo**: [username/repo-name]
-**Live URL**: [https://username.github.io/repo-name]
+**GitHub repo**: bhwilkoff/Scholarshipping/
+**Live URL**: https://bhwilkoff.github.io/Scholarshipping/
 
 ## Tech Stack
 
@@ -25,7 +25,7 @@ css/styles.css      All styles (mobile-first, custom properties)
 js/app.js           Application logic
 SCRATCHPAD.md       Session state, milestone log, open questions
 DECISIONS.md        Architecture decision record (append-only)
-CLAUDE.md           This file — project context and standing instructions
+GEMINI.md           This file — project context and standing instructions
 ```
 
 ## Conventions
@@ -40,7 +40,7 @@ CLAUDE.md           This file — project context and standing instructions
 
 ---
 
-## Standing Instructions for Claude
+## Standing Instructions for Gemini
 
 ### Learning Orientation — Non-Negotiable
 
