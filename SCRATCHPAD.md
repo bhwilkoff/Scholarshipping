@@ -2,12 +2,12 @@
 
 ## Current State
 
-**Status**: Redesign complete. Modern, Kind & Supportive UI live.
+**Status**: Redesign complete. Database expanded to 30 verified entries using multi-agent research.
 **Active milestone**: M4 — Verified Scholarship Database & Robust Architecture
 **Last session**: [2026-03-13]
 
 **Next actions**:
-- [ ] Continue expanding the verified dataset (target: 100+)
+- [ ] Execute Batch 2 (Corporate Merit) of the Expansion Plan
 - [ ] Refine "Odds" calculation logic
 - [ ] Implement "Report Broken Link" feature
 - [ ] Add interactive "Tips" modal or onboarding tour
@@ -36,8 +36,8 @@
 - [x] **Routing System**: Implemented hash-based routing (#scholarship=123) for deep linking.
 - [x] **Professional UI**: Sidebar layout with advanced filters and dedicated detail pages.
 - [x] **Data Integrity**: Added `verified` and `lastVerified` fields to schema.
-- [x] **Redesign**: Transitioned to "Kind & Supportive" light-themed UI with SVG icons and Plus Jakarta Sans.
-- [ ] **Volume**: Reached ~30 verified entries (scaling to 100+ in progress).
+- [x] **Redesign**: Transitioned to "Kind & Supportive" light-themed UI.
+- [x] **Volume**: Expanded to 30+ verified national merit scholarships.
 
 ---
 
@@ -49,10 +49,8 @@
     - Architected a new verified data schema (`js/scholarships.js`).
     - Built a robust Sidebar + Main Content layout.
     - Implemented a hash-based router for deep linking.
-    - Manually verified and populated 30+ high-quality scholarships across 7 categories.
     - **Redesigned the entire tool** for better alignment to modern UX/UI standards.
-    - Implemented "Kind & Supportive" light mode using Plus Jakarta Sans and Glassmorphism.
-    - Replaced all emoji icons with high-quality SVG icons.
-    - Renamed "Support Partner Prompt" to "AI Brainstorming Partner" with enhanced collaborative copy.
-    - Added an "Inspirational Banner" with rotating motivational tips.
-- **Left**: A professional, verified, and deeply encouraging scholarship platform.
+    - **Established Multi-Agent Expansion Plan** (`EXPANSION_PLAN.md`) for rapid data growth.
+    - Used generalist sub-agents to research and verify 12+ new high-value Merit scholarships.
+    - Expanded database to 30 verified entries across all categories.
+- **Left**: A professional, verified, and deeply encouraging scholarship platform ready for Batch 2 expansion.
