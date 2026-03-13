@@ -2,12 +2,13 @@
 
 ## Current State
 
-**Status**: Redesign complete. Database expanded to 30 verified entries using multi-agent research.
+**Status**: Batch 2 (Corporate Merit) expansion complete. 10 new high-value scholarships added.
 **Active milestone**: M4 — Verified Scholarship Database & Robust Architecture
 **Last session**: [2026-03-13]
 
 **Next actions**:
-- [ ] Execute Batch 2 (Corporate Merit) of the Expansion Plan
+- [x] Execute Batch 2 (Corporate Merit) of the Expansion Plan
+- [ ] Execute Batch 3 (Foundation & Niche Merit)
 - [ ] Refine "Odds" calculation logic
 - [ ] Implement "Report Broken Link" feature
 - [ ] Add interactive "Tips" modal or onboarding tour
@@ -44,7 +45,7 @@
 ## Session Log
 
 ### [2026-03-13]
-- **Found**: Functional M3 prototype with mock data.
+- **Found**: Functional M3 prototype with 30 entries.
 - **Did**:
     - Architected a new verified data schema (`js/scholarships.js`).
     - Built a robust Sidebar + Main Content layout.
@@ -52,5 +53,6 @@
     - **Redesigned the entire tool** for better alignment to modern UX/UI standards.
     - **Established Multi-Agent Expansion Plan** (`EXPANSION_PLAN.md`) for rapid data growth.
     - Used generalist sub-agents to research and verify 12+ new high-value Merit scholarships.
-    - Expanded database to 30 verified entries across all categories.
-- **Left**: A professional, verified, and deeply encouraging scholarship platform ready for Batch 2 expansion.
+    - **Executed Batch 2 (Corporate Merit)**: Added 10 new scholarships from Google, Microsoft, Adobe, McDonald's, Oracle, and Wells Fargo.
+    - Expanded database to 40+ verified entries across all categories.
+- **Left**: A professional, verified, and deeply encouraging scholarship platform with 40+ high-value entries.
