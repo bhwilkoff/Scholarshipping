@@ -3,88 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="[App description — shown in search results and link previews]">
-  <title>Scholarshipping — Find Your Path</title>
+  <meta name="description" content="Verified scholarship search and application assistant.">
+  <title>Scholarshipping — Verified Scholarship Search</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <header class="site-header">
-    <h1>Scholarshipping</h1>
-    <p class="tagline">The only resource you'll need to find and apply to the most relevant scholarships.</p>
-  </header>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Scholarshipping</h1>
+        <p class="tagline">Find your future.</p>
+      </div>
 
-  <main id="main-content">
+      <nav class="sidebar-nav">
+        <a href="#home" class="nav-item active" data-route="home">
+          <span class="icon">🏠</span> Home
+        </a>
+        <a href="#about" class="nav-item" data-route="about">
+          <span class="icon">ℹ️</span> About
+        </a>
+      </nav>
 
-    <section class="search-section">
-      <div class="search-controls">
-        <div class="search-bar">
-          <label for="scholarship-search" class="visually-hidden">Search Scholarships</label>
-          <input type="text" id="scholarship-search" placeholder="Search by name, provider, or keyword...">
+      <div class="sidebar-filters">
+        <h3>Filters</h3>
+        
+        <div class="filter-group">
+          <label for="filter-category">Category</label>
+          <select id="filter-category">
+            <option value="all">All Categories</option>
+            <option value="Merit / Essay / Service">Merit / Service</option>
+            <option value="STEM">STEM</option>
+            <option value="Identity / Diversity">Identity / Diversity</option>
+            <option value="Need-Based">Need-Based</option>
+            <option value="Regional / State-Specific">Regional</option>
+            <option value="Arts">Arts</option>
+            <option value="Athletic">Athletic</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-amount">Min Amount</label>
+          <select id="filter-amount">
+            <option value="0">Any</option>
+            <option value="1000">$1,000+</option>
+            <option value="5000">$5,000+</option>
+            <option value="10000">$10,000+</option>
+            <option value="25000">$25,000+</option>
+          </select>
         </div>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label for="filter-amount">Min Amount</label>
-            <select id="filter-amount">
-              <option value="0">Any</option>
-              <option value="500">$500+</option>
-              <option value="1000">$1,000+</option>
-              <option value="2500">$2,500+</option>
-              <option value="5000">$5,000+</option>
-            </select>
-          </div>
-          
-          <div class="filter-group">
-            <label for="filter-location">Location</label>
-            <select id="filter-location">
-              <option value="all">All Locations</option>
-              <option value="National">National</option>
-              <option value="California">California</option>
-              <option value="New York">New York</option>
-              <option value="Texas">Texas</option>
-              <option value="Florida">Florida</option>
-            </select>
-          </div>
+        <div class="filter-group">
+          <label for="filter-location">Location</label>
+          <select id="filter-location">
+            <option value="all">Any Location</option>
+            <option value="National">National</option>
+            <option value="State">State Specific</option>
+          </select>
+        </div>
 
-          <div class="filter-group">
-            <label for="sort-by">Sort By</label>
-            <select id="sort-by">
-              <option value="deadline">Deadline (Soonest)</option>
-              <option value="amount-high">Amount (Highest)</option>
-              <option value="amount-low">Amount (Lowest)</option>
-              <option value="likelihood">Likelihood (Highest)</option>
-            </select>
-          </div>
+        <div class="filter-group">
+          <label for="sort-by">Sort By</label>
+          <select id="sort-by">
+            <option value="deadline">Deadline (Soonest)</option>
+            <option value="amount-high">Amount (Highest)</option>
+            <option value="likelihood">Likelihood (Best)</option>
+          </select>
         </div>
       </div>
+    </aside>
+
+    <main id="main-content" class="main-content">
       
-      <div class="results-info">
-        <span id="result-count">0</span> scholarships found
-      </div>
-    </section>
-
-    <section id="scholarship-list" class="scholarship-grid">
-      <!-- Scholarships will be rendered here -->
-    </section>
-
-    <!-- Modal for Scholarship Details & Prompt Generator -->
-    <div id="modal-backdrop" class="modal-backdrop hidden">
-      <div id="details-modal" class="modal">
-        <button id="close-modal" class="close-btn" aria-label="Close modal">&times;</button>
-        <div id="modal-content" class="modal-body">
-          <!-- Content will be injected here -->
+      <!-- VIEW: Home / Search Results -->
+      <section id="view-home" class="view-section active">
+        <div class="search-header">
+          <div class="search-bar">
+            <label for="scholarship-search" class="visually-hidden">Search Scholarships</label>
+            <input type="text" id="scholarship-search" placeholder="Search verified scholarships...">
+          </div>
+          <div class="results-info">
+            <span id="result-count">0</span> verified results
+          </div>
         </div>
+
+        <section id="scholarship-list" class="scholarship-grid">
+          <!-- Scholarships rendered here -->
+        </section>
+      </section>
+
+      <!-- VIEW: Single Scholarship Detail Page -->
+      <section id="view-detail" class="view-section hidden">
+        <button class="btn-back" onclick="window.history.back()">← Back to Search</button>
+        <div id="detail-content" class="detail-container">
+          <!-- Detail content injected here -->
+        </div>
+      </section>
+
+      <!-- VIEW: About -->
+      <section id="view-about" class="view-section hidden">
+        <div class="about-container">
+          <h2>About Scholarshipping</h2>
+          <p>Scholarshipping is a verified database of scholarship opportunities designed to help students fund their education without debt. We prioritize accuracy, transparency, and student agency.</p>
+          <h3>Our Verification Promise</h3>
+          <p>Every scholarship marked as "Verified" has been manually checked by our team to ensure the link works and the details are accurate as of the last verification date.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal for Prompt Generator -->
+  <div id="modal-backdrop" class="modal-backdrop hidden">
+    <div id="details-modal" class="modal">
+      <button id="close-modal" class="close-btn" aria-label="Close modal">&times;</button>
+      <div id="modal-content" class="modal-body">
+        <!-- Content will be injected here -->
       </div>
     </div>
+  </div>
 
-  </main>
-
-  <footer class="site-footer">
-    <p>Scholarshipping &mdash; built with care for future leaders</p>
-  </footer>
-
-  <script src="js/data.js"></script>
+  <script src="js/scholarships.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

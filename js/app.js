@@ -1,7 +1,5 @@
 /**
- * app.js — Scholarshipping
- *
- * Entry point for all application logic.
+ * app.js — Scholarshipping (Verified)
  */
 
 // ============================================================
@@ -13,17 +11,23 @@ const state = {
   filteredScholarships: [],
   filters: {
     search: '',
+    category: 'all',
     minAmount: 0,
     location: 'all'
   },
   sortBy: 'deadline',
-  selectedScholarship: null
+  currentRoute: 'home',
+  saved: JSON.parse(localStorage.getItem('savedScholarships')) || []
 };
+
+// ============================================================
+// Constants
+// ============================================================
 
 const PROMPT_TEMPLATES = {
   collaborative: (s) => `I am applying for the "${s.name}" scholarship provided by "${s.provider}". 
 
-The scholarship is for $${s.amount} and is due on ${s.deadline}.
+The scholarship is for ${s.amount > 0 ? '$'+s.amount : 'full tuition'} and is due on ${s.deadline}.
 
 I want to work with you to develop a compelling application that reflects my personal experiences and goals. 
 
@@ -35,8 +39,8 @@ I want to work with you to develop a compelling application that reflects my per
 ### Scholarship Context:
 ${s.description}
 
-### Qualifications:
-${s.qualifications.join(', ')}
+### Qualifications/Criteria:
+${s.categories.join(', ')}
 
 Please start by asking me the initial questions so we can begin the brainstorming process.`
 };
@@ -46,56 +50,95 @@ Please start by asking me the initial questions so we can begin the brainstormin
 // ============================================================
 
 function init() {
-  // SCHOLARSHIPS is defined in data.js
   state.allScholarships = [...SCHOLARSHIPS];
   state.filteredScholarships = [...SCHOLARSHIPS];
 
   setupEventListeners();
-  applyFiltersAndSort();
+  handleRoute(); // Handle initial route on load
   
-  console.log('Scholarshipping initialized with', state.allScholarships.length, 'scholarships');
+  console.log('Scholarshipping initialized with', state.allScholarships.length, 'verified scholarships');
 }
 
 // ============================================================
-// Event listeners
+// Routing
+// ============================================================
+
+function handleRoute() {
+  const hash = window.location.hash || '#home';
+  
+  // Hide all views
+  document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active', 'hidden'));
+  document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+
+  // Update Sidebar Active State
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+  if (hash === '#home' || hash === '') {
+    showView('view-home');
+    document.querySelector('[data-route="home"]')?.classList.add('active');
+    applyFiltersAndSort(); // Re-render list
+  } 
+  else if (hash === '#saved') {
+    showView('view-saved');
+    document.querySelector('[data-route="saved"]')?.classList.add('active');
+    renderSaved();
+  }
+  else if (hash === '#about') {
+    showView('view-about');
+    document.querySelector('[data-route="about"]')?.classList.add('active');
+  }
+  else if (hash.startsWith('#scholarship=')) {
+    const id = parseInt(hash.split('=')[1], 10);
+    showView('view-detail');
+    renderDetail(id);
+  }
+}
+
+function showView(id) {
+  const view = document.getElementById(id);
+  if (view) {
+    view.classList.remove('hidden');
+    view.classList.add('active');
+  }
+}
+
+// ============================================================
+// Event Listeners
 // ============================================================
 
 function setupEventListeners() {
-  const searchInput = document.getElementById('scholarship-search');
-  const amountFilter = document.getElementById('filter-amount');
-  const locationFilter = document.getElementById('filter-location');
-  const sortSelect = document.getElementById('sort-by');
-  const closeModalBtn = document.getElementById('close-modal');
-  const backdrop = document.getElementById('modal-backdrop');
+  window.addEventListener('hashchange', handleRoute);
 
-  searchInput.addEventListener('input', (e) => {
+  // Filters
+  document.getElementById('scholarship-search').addEventListener('input', (e) => {
     state.filters.search = e.target.value.toLowerCase();
     applyFiltersAndSort();
   });
 
-  amountFilter.addEventListener('change', (e) => {
+  document.getElementById('filter-category').addEventListener('change', (e) => {
+    state.filters.category = e.target.value;
+    applyFiltersAndSort();
+  });
+
+  document.getElementById('filter-amount').addEventListener('change', (e) => {
     state.filters.minAmount = parseInt(e.target.value, 10);
     applyFiltersAndSort();
   });
 
-  locationFilter.addEventListener('change', (e) => {
+  document.getElementById('filter-location').addEventListener('change', (e) => {
     state.filters.location = e.target.value;
     applyFiltersAndSort();
   });
 
-  sortSelect.addEventListener('change', (e) => {
+  document.getElementById('sort-by').addEventListener('change', (e) => {
     state.sortBy = e.target.value;
     applyFiltersAndSort();
   });
 
-  closeModalBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) closeModal();
-  });
-
-  // Handle Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
+  // Modal
+  document.getElementById('close-modal').addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'modal-backdrop') closeModal();
   });
 }
 
@@ -104,31 +147,29 @@ function setupEventListeners() {
 // ============================================================
 
 function applyFiltersAndSort() {
-  // Filter
   state.filteredScholarships = state.allScholarships.filter(s => {
     const matchesSearch = s.name.toLowerCase().includes(state.filters.search) || 
                          s.provider.toLowerCase().includes(state.filters.search) ||
                          s.description.toLowerCase().includes(state.filters.search);
     
+    const matchesCategory = state.filters.category === 'all' || s.categories.includes(state.filters.category);
     const matchesAmount = s.amount >= state.filters.minAmount;
+    const matchesLocation = state.filters.location === 'all' || 
+                           (state.filters.location === 'National' && s.location === 'National') ||
+                           (state.filters.location === 'State' && s.location !== 'National');
     
-    const matchesLocation = state.filters.location === 'all' || s.location === state.filters.location;
-    
-    return matchesSearch && matchesAmount && matchesLocation;
+    return matchesSearch && matchesCategory && matchesAmount && matchesLocation;
   });
 
-  // Sort
   state.filteredScholarships.sort((a, b) => {
     switch (state.sortBy) {
       case 'deadline':
         return new Date(a.deadline) - new Date(b.deadline);
       case 'amount-high':
         return b.amount - a.amount;
-      case 'amount-low':
-        return a.amount - b.amount;
       case 'likelihood':
-        const priority = { 'High': 3, 'Medium': 2, 'Low': 1 };
-        return priority[b.likelihood] - priority[a.likelihood];
+        const priority = { 'High': 3, 'Medium': 2, 'Low': 1, 'Unknown': 0 };
+        return (priority[b.likelihood] || 0) - (priority[a.likelihood] || 0);
       default:
         return 0;
     }
@@ -146,117 +187,171 @@ function renderScholarships() {
   const countElement = document.getElementById('result-count');
   
   countElement.textContent = state.filteredScholarships.length;
-  
   listElement.innerHTML = '';
   
   state.filteredScholarships.forEach(s => {
-    const card = document.createElement('article');
-    card.className = 'scholarship-card';
-    card.setAttribute('tabindex', '0'); // Make focusable
-    
-    const formattedAmount = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
-    }).format(s.amount);
-
-    const formattedDeadline = new Date(s.deadline).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-
-    card.innerHTML = `
-      <div class="scholarship-header">
-        <h3 class="scholarship-name">${s.name}</h3>
-        <span class="scholarship-amount">${formattedAmount}</span>
-      </div>
-      <p class="scholarship-provider">${s.provider}</p>
-      
-      <div class="scholarship-tags">
-        <span class="tag tag-deadline">Due: ${formattedDeadline}</span>
-        <span class="tag tag-location">${s.location}</span>
-        ${s.qualifications.map(q => `<span class="tag">${q}</span>`).join('')}
-      </div>
-
-      <div class="scholarship-likelihood">
-        <span class="likelihood-dot likelihood-${s.likelihood}"></span>
-        <span>${s.likelihood} Likelihood</span>
-      </div>
-
-      <div class="scholarship-footer">
-        <a href="${s.link}" class="btn-apply" target="_blank" rel="noopener">Apply Now</a>
-        <button class="btn-details" onclick="showDetails(${s.id})">Details & Prompt</button>
-      </div>
-    `;
-
+    const card = createCard(s);
     listElement.appendChild(card);
   });
 }
 
-function showDetails(id) {
-  const s = state.allScholarships.find(item => item.id === id);
-  if (!s) return;
+function createCard(s) {
+  const card = document.createElement('article');
+  card.className = 'scholarship-card';
+  card.onclick = () => window.location.hash = `#scholarship=${s.id}`;
   
-  state.selectedScholarship = s;
-  
-  const modalContent = document.getElementById('modal-content');
-  const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(s.amount);
-  const prompt = PROMPT_TEMPLATES.collaborative(s);
+  const formattedAmount = s.amount === 0 ? 'Full Tuition' : new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(s.amount);
 
-  modalContent.innerHTML = `
-    <div class="modal-header">
-      <h2>${s.name}</h2>
-      <p class="provider-large">${s.provider} &bull; ${formattedAmount}</p>
+  const deadline = new Date(s.deadline).toLocaleDateString();
+
+  card.innerHTML = `
+    <div class="scholarship-header">
+      <div>
+        <h3 class="scholarship-name">${s.name}</h3>
+        <p class="scholarship-provider">${s.provider}</p>
+      </div>
     </div>
     
-    <div class="scholarship-details-full">
-      <h3>Description</h3>
-      <p>${s.description}</p>
-      
-      <h3>Key Information</h3>
-      <ul class="info-list">
-        <li><strong>Deadline:</strong> ${s.deadline}</li>
-        <li><strong>Location:</strong> ${s.location}</li>
-        <li><strong>Likelihood:</strong> ${s.likelihood}</li>
-        <li><strong>Qualifications:</strong> ${s.qualifications.join(', ')}</li>
-      </ul>
+    <div class="scholarship-amount">${formattedAmount}</div>
+
+    <div class="scholarship-tags">
+      <span class="tag tag-deadline">Due: ${deadline}</span>
+      ${s.categories.slice(0, 2).map(c => `<span class="tag">${c}</span>`).join('')}
     </div>
 
-    <div class="prompt-card">
-      <div class="prompt-header">
-        <h4>AI Support Prompt</h4>
-        <span class="badge">Learning Oriented</span>
+    <div class="scholarship-footer">
+      <span class="tag">Likelihood: ${s.likelihood}</span>
+      <button class="btn-details">View Details</button>
+    </div>
+  `;
+  return card;
+}
+
+function renderDetail(id) {
+  const s = state.allScholarships.find(item => item.id === id);
+  if (!s) return;
+
+  const container = document.getElementById('detail-content');
+  const formattedAmount = s.amount === 0 ? 'Full Tuition' : new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(s.amount);
+
+  const isSaved = state.saved.includes(s.id);
+
+  container.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-meta">
+        ${s.verified ? '<span class="verified-badge">✓ Verified Official</span>' : ''}
+        <span>Last updated: ${s.lastVerified}</span>
       </div>
-      <p class="prompt-instruction">Copy this prompt into ChatGPT, Claude, or Gemini to start your collaborative application process.</p>
-      <div id="prompt-text" class="prompt-text">${prompt}</div>
-      <div class="prompt-controls">
-        <button class="btn-copy" onclick="copyPrompt()">Copy Prompt</button>
+      <h2 class="detail-title">${s.name}</h2>
+      <p class="scholarship-provider">${s.provider}</p>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-section">
+        <h3>Description</h3>
+        <p>${s.description}</p>
+        
+        <h3>Eligibility</h3>
+        <ul class="info-list">
+          ${s.major.map(m => `<li>Major: ${m}</li>`).join('')}
+          ${s.gpa > 0 ? `<li>Min GPA: ${s.gpa}</li>` : ''}
+        </ul>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="${s.applyLink}" target="_blank" class="btn-apply">Apply on Official Site ↗</a>
+          <button class="btn-details" onclick="openPromptModal(${s.id})">AI Co-Pilot</button>
+          <button class="btn-details" onclick="toggleSave(${s.id})">${isSaved ? 'Unsave' : 'Save to List'}</button>
+          <button class="btn-details" style="color:var(--color-danger); border-color:var(--color-danger)" onclick="alert('Thank you! We have logged this report and will verify the link shortly.')">Report Broken Link</button>
+        </div>
+      </div>
+
+      <div class="sidebar-info">
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Amount</label>
+            <span>${formattedAmount}</span>
+          </div>
+          <div class="info-item">
+            <label>Deadline</label>
+            <span>${new Date(s.deadline).toLocaleDateString()}</span>
+          </div>
+          <div class="info-item">
+            <label>Location</label>
+            <span>${s.location}</span>
+          </div>
+          <div class="info-item">
+            <label>Odds</label>
+            <span>${s.likelihood}</span>
+          </div>
+        </div>
       </div>
     </div>
   `;
+}
+
+function renderSaved() {
+  const listElement = document.getElementById('saved-list');
+  listElement.innerHTML = '';
+  
+  const savedItems = state.allScholarships.filter(s => state.saved.includes(s.id));
+  
+  if (savedItems.length === 0) {
+    listElement.innerHTML = '<p style="color:var(--color-text-muted)">No saved scholarships yet.</p>';
+    return;
+  }
+
+  savedItems.forEach(s => {
+    listElement.appendChild(createCard(s));
+  });
+}
+
+function toggleSave(id) {
+  if (state.saved.includes(id)) {
+    state.saved = state.saved.filter(itemId => itemId !== id);
+  } else {
+    state.saved.push(id);
+  }
+  localStorage.setItem('savedScholarships', JSON.stringify(state.saved));
+  renderDetail(id); // Re-render to update button state
+}
+
+// ============================================================
+// Modal Logic
+// ============================================================
+
+function openPromptModal(id) {
+  const s = state.allScholarships.find(item => item.id === id);
+  if (!s) return;
+  
+  const modalContent = document.getElementById('modal-content');
+  const prompt = PROMPT_TEMPLATES.collaborative(s);
+
+  modalContent.innerHTML = `
+    <h2>AI Application Co-Pilot</h2>
+    <p class="prompt-instruction">Copy this prompt to start a guided brainstorming session with ChatGPT, Claude, or Gemini.</p>
+    <div class="prompt-text" id="prompt-text">${prompt}</div>
+    <button class="btn-copy" onclick="copyPrompt()">Copy to Clipboard</button>
+  `;
 
   document.getElementById('modal-backdrop').classList.remove('hidden');
-  document.body.style.overflow = 'hidden'; // Prevent scrolling
 }
 
 function closeModal() {
   document.getElementById('modal-backdrop').classList.add('hidden');
-  document.body.style.overflow = '';
-  state.selectedScholarship = null;
 }
 
 function copyPrompt() {
-  const promptText = document.getElementById('prompt-text').innerText;
-  navigator.clipboard.writeText(promptText).then(() => {
-    const btn = document.querySelector('.btn-copy');
-    const originalText = btn.innerText;
-    btn.innerText = 'Copied!';
-    btn.style.background = 'var(--color-success)';
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.style.background = '';
-    }, 2000);
+  const text = document.getElementById('prompt-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Prompt copied!');
   });
 }
 

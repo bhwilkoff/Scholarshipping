@@ -41,4 +41,10 @@
 **Alternatives considered**: Direct essay generation prompts.
 **Trade-offs**: Requires more effort from the user, but yields a more authentic and higher-quality result.
 
-<!-- Add new decisions below, incrementing the number. -->
+## Decision 004 — Verified "Seed" vs. Bulk Import
+
+**Date**: [2026-03-13]
+**Decision**: Prioritize a smaller, manually verified "seed" dataset (~100 entries) over a massive, unverified scraping import (~1000+ entries).
+**Rationale**: The user explicitly requested "100% accuracy" and "verified links." Scraping 1000 links without a dedicated QA team/process guarantees broken links and frustration. A high-quality seed builds trust; a large, broken database destroys it.
+**Alternatives considered**: Scraping large public lists without checking.
+**Trade-offs**: Lower initial volume, but significantly higher user trust and data integrity.
