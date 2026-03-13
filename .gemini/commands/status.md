@@ -1,6 +1,6 @@
 Report the current state of the project in a brief, structured summary.
 
-Read CLAUDE.md, SCRATCHPAD.md, and DECISIONS.md, then output:
+Read GEMINI.md, SCRATCHPAD.md, and DECISIONS.md, then output:
 
 **[App Name] — Status**
 

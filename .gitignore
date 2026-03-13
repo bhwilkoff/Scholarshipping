@@ -3,11 +3,11 @@ docs/summaries/
 docs/archive/
 output/
 
-# .claude runtime state — these are generated, not part of the template
-.claude/agents/
+# .gemini runtime state — these are generated, not part of the template
+.gemini/agents/
 # settings.json ships with the template (it configures the session-start hook)
 # exclude only user-local overrides
-.claude/settings.local.json
+.gemini/settings.local.json
 
 # OS files
 .DS_Store
@@ -21,4 +21,4 @@ Thumbs.db
 .idea/
 
 # The research file used to build the README (not part of the public repo)
-Claude-Compaction-Problem.md
+Gemini-Compaction-Problem.md
